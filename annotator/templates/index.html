@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pairwise annotator</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Pairwise annotator</div>
+    <div class="who">
+      <label for="annotator">Annotator</label>
+      <input id="annotator" type="text" placeholder="your name" autocomplete="off">
+      <button id="start" class="btn">Start</button>
+    </div>
+    <div class="progress" id="progress" hidden>
+      <div class="bar"><div class="fill" id="progress-fill"></div></div>
+      <span id="progress-text"></span>
+    </div>
+    <nav class="links">
+      <a href="/api/stats" target="_blank">stats</a>
+      <a href="/api/export" target="_blank">export</a>
+    </nav>
+  </header>
+
+  <main id="main" hidden>
+    <section class="prompt">
+      <h2>Prompt</h2>
+      <pre id="prompt"></pre>
+    </section>
+
+    <section class="responses">
+      <article class="response" data-side="left">
+        <h3>Response 1 <kbd>1</kbd></h3>
+        <pre id="left"></pre>
+      </article>
+      <article class="response" data-side="right">
+        <h3>Response 2 <kbd>2</kbd></h3>
+        <pre id="right"></pre>
+      </article>
+    </section>
+
+    <section class="rubric">
+      <h2>Rubric <span class="hint">{{ score_min }} = poor, {{ score_max }} = excellent</span></h2>
+      <table>
+        <thead>
+          <tr><th></th><th>Response 1</th><th>Response 2</th></tr>
+        </thead>
+        <tbody>
+          {% for c in criteria %}
+          <tr data-criterion="{{ c }}">
+            <th scope="row">{{ c }}</th>
+            {% for side in ("left", "right") %}
+            <td>
+              <div class="scale" data-side="{{ side }}" data-criterion="{{ c }}">
+                {% for v in range(score_min, score_max + 1) %}
+                <button type="button" class="pip" data-value="{{ v }}">{{ v }}</button>
+                {% endfor %}
+              </div>
+            </td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <section class="decision">
+      <h2>Which response is better overall?</h2>
+      <div class="choices">
+        <button type="button" class="choice" data-pref="left">Response 1 <kbd>1</kbd></button>
+        <button type="button" class="choice" data-pref="tie">Tie <kbd>3</kbd></button>
+        <button type="button" class="choice" data-pref="right">Response 2 <kbd>2</kbd></button>
+      </div>
+      <label for="rationale">Why? (required — be specific: which line, which claim, which edge case)</label>
+      <textarea id="rationale" rows="3" placeholder="e.g. Response 2 claims list.sort() returns the list; it returns None. Response 1 is correct and also mentions the key= argument."></textarea>
+      <div class="actions">
+        <span id="error" class="error"></span>
+        <button id="submit" class="btn primary">Submit <kbd>Ctrl</kbd>+<kbd>Enter</kbd></button>
+      </div>
+    </section>
+  </main>
+
+  <section id="done" class="done" hidden>
+    <h2>All items annotated — thank you.</h2>
+    <p>See <a href="/api/stats" target="_blank">agreement stats</a> or <a href="/api/export">download the preference pairs</a>.</p>
+  </section>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

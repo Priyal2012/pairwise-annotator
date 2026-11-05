@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pairwise-annotator"
+version = "0.1.0"
+description = "Side-by-side preference annotation for AI responses, with inter-annotator agreement and DPO-style export."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Priyal Meena" }]
+dependencies = ["flask>=3.0"]
+
+[project.optional-dependencies]
+dev = ["pytest>=7", "ruff>=0.4"]
+
+[project.scripts]
+annotator = "annotator.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["annotator*"]
+
+[tool.setuptools.package-data]
+annotator = ["templates/*.html", "static/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.ruff.lint.per-file-ignores]
+"annotator/seed.py" = ["E501"]  # long prose strings in the seed data

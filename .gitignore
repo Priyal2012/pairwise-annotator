@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+.venv/
+.env
+# real annotation data stays local; the committed data/ holds only seed items + a simulated demo
+data/annotations.jsonl
+preference_pairs.jsonl
