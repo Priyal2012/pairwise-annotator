@@ -75,7 +75,7 @@ noisy demo annotations so the stats and export commands have something to chew o
 ## Install & run
 
 ```bash
-git clone https://github.com/Priyal2004784/pairwise-annotator
+git clone https://github.com/Priyal2012/pairwise-annotator
 cd pairwise-annotator
 pip install -e ".[dev]"          # flask + pytest + ruff
 
